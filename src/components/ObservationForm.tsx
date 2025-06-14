@@ -28,6 +28,12 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
     customFields: [] as CustomField[],
   });
 
+  const [enabledFields, setEnabledFields] = useState({
+    problem: false,
+    solution: false,
+    outcome: false,
+  });
+
   // Populate form data when editing
   useEffect(() => {
     if (editingObservation) {
@@ -40,6 +46,11 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
         researcher: editingObservation.researcher,
         tags: [],
         customFields: editingObservation.customFields || [],
+      });
+      setEnabledFields({
+        problem: !!editingObservation.problem,
+        solution: !!editingObservation.solution,
+        outcome: !!editingObservation.outcome,
       });
     }
   }, [editingObservation]);
@@ -89,10 +100,21 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
     }));
   };
 
-  const clearOptionalField = (fieldName: 'problem' | 'solution' | 'outcome') => {
+  const enableField = (fieldName: 'problem' | 'solution' | 'outcome') => {
+    setEnabledFields(prev => ({
+      ...prev,
+      [fieldName]: true
+    }));
+  };
+
+  const removeField = (fieldName: 'problem' | 'solution' | 'outcome') => {
     setFormData(prev => ({
       ...prev,
       [fieldName]: ""
+    }));
+    setEnabledFields(prev => ({
+      ...prev,
+      [fieldName]: false
     }));
   };
 
@@ -209,88 +231,133 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
               />
             </div>
 
-            {/* Problem - Now Optional */}
-            <div className="space-y-2">
+            {/* Optional Fields Section */}
+            <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <Label htmlFor="problem" className="text-slate-700 font-medium">
-                  Problem Encountered
-                </Label>
-                {formData.problem && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => clearOptionalField('problem')}
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50 h-7 px-2"
-                  >
-                    <Trash2 className="h-3 w-3 mr-1" />
-                    Clear
-                  </Button>
-                )}
+                <Label className="text-slate-700 font-medium">Optional Fields</Label>
+                <div className="flex gap-2">
+                  {!enabledFields.problem && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => enableField('problem')}
+                      className="text-xs"
+                    >
+                      <Plus className="h-3 w-3 mr-1" />
+                      Problem
+                    </Button>
+                  )}
+                  {!enabledFields.solution && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => enableField('solution')}
+                      className="text-xs"
+                    >
+                      <Plus className="h-3 w-3 mr-1" />
+                      Solution
+                    </Button>
+                  )}
+                  {!enabledFields.outcome && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => enableField('outcome')}
+                      className="text-xs"
+                    >
+                      <Plus className="h-3 w-3 mr-1" />
+                      Outcome
+                    </Button>
+                  )}
+                </div>
               </div>
-              <Textarea
-                id="problem"
-                placeholder="Describe the problem or challenge you faced today..."
-                value={formData.problem}
-                onChange={(e) => setFormData(prev => ({ ...prev, problem: e.target.value }))}
-                className="min-h-[100px] border-slate-300 focus:border-blue-500 focus:ring-blue-500 resize-none"
-              />
-            </div>
 
-            {/* Solution - Now Optional */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="solution" className="text-slate-700 font-medium">
-                  Solution Applied
-                </Label>
-                {formData.solution && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => clearOptionalField('solution')}
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50 h-7 px-2"
-                  >
-                    <Trash2 className="h-3 w-3 mr-1" />
-                    Clear
-                  </Button>
-                )}
-              </div>
-              <Textarea
-                id="solution"
-                placeholder="Describe the approach or solution you tried..."
-                value={formData.solution}
-                onChange={(e) => setFormData(prev => ({ ...prev, solution: e.target.value }))}
-                className="min-h-[100px] border-slate-300 focus:border-blue-500 focus:ring-blue-500 resize-none"
-              />
-            </div>
+              {/* Problem Field */}
+              {enabledFields.problem && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="problem" className="text-slate-700 font-medium">
+                      Problem Encountered
+                    </Label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeField('problem')}
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50 h-7 px-2"
+                    >
+                      <Trash2 className="h-3 w-3 mr-1" />
+                      Remove
+                    </Button>
+                  </div>
+                  <Textarea
+                    id="problem"
+                    placeholder="Describe the problem or challenge you faced today..."
+                    value={formData.problem}
+                    onChange={(e) => setFormData(prev => ({ ...prev, problem: e.target.value }))}
+                    className="min-h-[100px] border-slate-300 focus:border-blue-500 focus:ring-blue-500 resize-none"
+                  />
+                </div>
+              )}
 
-            {/* Outcome - Now Optional */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="outcome" className="text-slate-700 font-medium">
-                  Outcome & Results
-                </Label>
-                {formData.outcome && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => clearOptionalField('outcome')}
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50 h-7 px-2"
-                  >
-                    <Trash2 className="h-3 w-3 mr-1" />
-                    Clear
-                  </Button>
-                )}
-              </div>
-              <Textarea
-                id="outcome"
-                placeholder="What happened? What were the results or next steps?"
-                value={formData.outcome}
-                onChange={(e) => setFormData(prev => ({ ...prev, outcome: e.target.value }))}
-                className="min-h-[100px] border-slate-300 focus:border-blue-500 focus:ring-blue-500 resize-none"
-              />
+              {/* Solution Field */}
+              {enabledFields.solution && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="solution" className="text-slate-700 font-medium">
+                      Solution Applied
+                    </Label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeField('solution')}
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50 h-7 px-2"
+                    >
+                      <Trash2 className="h-3 w-3 mr-1" />
+                      Remove
+                    </Button>
+                  </div>
+                  <Textarea
+                    id="solution"
+                    placeholder="Describe the approach or solution you tried..."
+                    value={formData.solution}
+                    onChange={(e) => setFormData(prev => ({ ...prev, solution: e.target.value }))}
+                    className="min-h-[100px] border-slate-300 focus:border-blue-500 focus:ring-blue-500 resize-none"
+                  />
+                </div>
+              )}
+
+              {/* Outcome Field */}
+              {enabledFields.outcome && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="outcome" className="text-slate-700 font-medium">
+                      Outcome & Results
+                    </Label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeField('outcome')}
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50 h-7 px-2"
+                    >
+                      <Trash2 className="h-3 w-3 mr-1" />
+                      Remove
+                    </Button>
+                  </div>
+                  <Textarea
+                    id="outcome"
+                    placeholder="What happened? What were the results or next steps?"
+                    value={formData.outcome}
+                    onChange={(e) => setFormData(prev => ({ ...prev, outcome: e.target.value }))}
+                    className="min-h-[100px] border-slate-300 focus:border-blue-500 focus:ring-blue-500 resize-none"
+                  />
+                </div>
+              )}
             </div>
 
             {/* Custom Fields */}
