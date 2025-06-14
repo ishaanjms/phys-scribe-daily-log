@@ -37,7 +37,7 @@ const Index = () => {
   const [editingObservation, setEditingObservation] = useState<Observation | undefined>();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
-  const [sortKey, setSortKey] = useState<"date" | "researcher" | "id">("date");
+  const [sortKey, setSortKey] = useState<"date" | "researcher">("date");
 
   useEffect(() => {
     const savedObservations = localStorage.getItem("physics-observations");
@@ -94,9 +94,6 @@ const Index = () => {
     }
     if (sortKey === "researcher") {
       return a.researcher.localeCompare(b.researcher);
-    }
-    if (sortKey === "id") {
-      return b.id.localeCompare(a.id);
     }
     return 0;
   });

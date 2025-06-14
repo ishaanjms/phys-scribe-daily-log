@@ -1,4 +1,3 @@
-
 import { Calendar, BookOpen, Plus, FileText, Settings, Home, User } from "lucide-react";
 import {
   Sidebar,
@@ -55,12 +54,11 @@ export function AppSidebar({ onNewEntry, totalObservations, todayObservations, s
                     <select
                       id="sort-observations"
                       value={sortKey}
-                      onChange={e => setSortKey(e.target.value as "date" | "researcher" | "id")}
+                      onChange={e => setSortKey(e.target.value as "date" | "researcher")}
                       className="w-full text-xs rounded-md border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-2 py-1"
                     >
                       <option value="date">Date (Newest)</option>
                       <option value="researcher">Researcher</option>
-                      <option value="id">ID</option>
                     </select>
                   </div>
                 )}
@@ -116,4 +114,3 @@ export function AppSidebar({ onNewEntry, totalObservations, todayObservations, s
     </Sidebar>
   );
 }
-
