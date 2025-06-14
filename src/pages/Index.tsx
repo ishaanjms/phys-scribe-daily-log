@@ -9,6 +9,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { ObservationHeader } from "@/components/ObservationHeader";
 import { EmptyState } from "@/components/EmptyState";
 import { ObservationsList } from "@/components/ObservationsList";
+import { Select } from "@/components/ui/select";
 import { format } from "date-fns"; // import date-fns format
 
 export interface CustomField {
@@ -36,6 +37,7 @@ const Index = () => {
   const [editingObservation, setEditingObservation] = useState<Observation | undefined>();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
+  const [sortKey, setSortKey] = useState<"date" | "researcher" | "id">("date");
 
   useEffect(() => {
     const savedObservations = localStorage.getItem("physics-observations");
@@ -85,7 +87,21 @@ const Index = () => {
     setEditingObservation(undefined);
   };
 
-  const filteredObservations = observations.filter(obs => {
+  // Sort observations based on sortKey
+  const sortedObservations = [...observations].sort((a, b) => {
+    if (sortKey === "date") {
+      return b.date.localeCompare(a.date) || b.time.localeCompare(a.time);
+    }
+    if (sortKey === "researcher") {
+      return a.researcher.localeCompare(b.researcher);
+    }
+    if (sortKey === "id") {
+      return b.id.localeCompare(a.id);
+    }
+    return 0;
+  });
+
+  const filteredObservations = sortedObservations.filter(obs => {
     const matchesSearch = 
       (obs.title && obs.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
       obs.problem.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -116,6 +132,8 @@ const Index = () => {
           onNewEntry={() => setShowForm(true)}
           totalObservations={observations.length}
           todayObservations={todayObservations.length}
+          sortKey={sortKey}
+          setSortKey={setSortKey}
         />
         
         <SidebarInset className="flex-1">

@@ -14,14 +14,17 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Select } from "@/components/ui/select";
 
 interface AppSidebarProps {
   onNewEntry: () => void;
   totalObservations: number;
   todayObservations: number;
+  sortKey?: "date" | "researcher" | "id";
+  setSortKey?: (v: "date" | "researcher" | "id") => void;
 }
 
-export function AppSidebar({ onNewEntry, totalObservations, todayObservations }: AppSidebarProps) {
+export function AppSidebar({ onNewEntry, totalObservations, todayObservations, sortKey, setSortKey }: AppSidebarProps) {
   return (
     <Sidebar className="border-r border-gray-200 dark:border-gray-700">
       <SidebarHeader className="p-4 border-b border-gray-100 dark:border-gray-700">
@@ -43,6 +46,24 @@ export function AppSidebar({ onNewEntry, totalObservations, todayObservations }:
                   <span>All Observations</span>
                   <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">{totalObservations}</span>
                 </SidebarMenuButton>
+                {/* Sort dropdown under All Observations */}
+                {setSortKey && (
+                  <div className="px-6 pt-2 pb-2">
+                    <label htmlFor="sort-observations" className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                      Sort by:
+                    </label>
+                    <select
+                      id="sort-observations"
+                      value={sortKey}
+                      onChange={e => setSortKey(e.target.value as "date" | "researcher" | "id")}
+                      className="w-full text-xs rounded-md border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-2 py-1"
+                    >
+                      <option value="date">Date (Newest)</option>
+                      <option value="researcher">Researcher</option>
+                      <option value="id">ID</option>
+                    </select>
+                  </div>
+                )}
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
@@ -95,3 +116,4 @@ export function AppSidebar({ onNewEntry, totalObservations, todayObservations }:
     </Sidebar>
   );
 }
+
