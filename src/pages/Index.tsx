@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Search, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -173,7 +172,7 @@ const Index = () => {
                   </h3>
                   <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm mx-auto">
                     {observations.length === 0 
-                      ? "Start documenting your research journey by creating your first observation."
+                      ? "Begin Your Research Journey"
                       : "Try adjusting your search terms or date filter."
                     }
                   </p>
