@@ -13,6 +13,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface AppSidebarProps {
   onNewEntry: () => void;
@@ -22,13 +23,13 @@ interface AppSidebarProps {
 
 export function AppSidebar({ onNewEntry, totalObservations, todayObservations }: AppSidebarProps) {
   return (
-    <Sidebar className="border-r border-gray-200">
-      <SidebarHeader className="p-4 border-b border-gray-100">
+    <Sidebar className="border-r border-gray-200 dark:border-gray-700">
+      <SidebarHeader className="p-4 border-b border-gray-100 dark:border-gray-700">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-sm flex items-center justify-center">
             <BookOpen className="h-3 w-3 text-white" />
           </div>
-          <span className="font-semibold text-gray-900">Eureka Notebook</span>
+          <span className="font-semibold text-gray-900 dark:text-gray-100">Eureka Notebook</span>
         </div>
       </SidebarHeader>
 
@@ -37,21 +38,21 @@ export function AppSidebar({ onNewEntry, totalObservations, todayObservations }:
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 rounded-md">
+                <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
                   <Home className="h-4 w-4" />
                   <span>All Observations</span>
-                  <span className="ml-auto text-xs text-gray-500">{totalObservations}</span>
+                  <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">{totalObservations}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 rounded-md">
+                <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
                   <Calendar className="h-4 w-4" />
                   <span>Today</span>
-                  <span className="ml-auto text-xs text-gray-500">{todayObservations}</span>
+                  <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">{todayObservations}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 rounded-md">
+                <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
                   <Search className="h-4 w-4" />
                   <span>Search</span>
                 </SidebarMenuButton>
@@ -61,13 +62,13 @@ export function AppSidebar({ onNewEntry, totalObservations, todayObservations }:
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-xs font-medium text-gray-500 px-2 py-1">
+          <SidebarGroupLabel className="text-xs font-medium text-gray-500 dark:text-gray-400 px-2 py-1">
             Quick Actions
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <Button
               onClick={onNewEntry}
-              className="w-full justify-start bg-blue-50 hover:bg-blue-100 text-blue-700 border-0 rounded-md"
+              className="w-full justify-start bg-blue-50 hover:bg-blue-100 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300 border-0 rounded-md"
             >
               <Plus className="h-4 w-4 mr-2" />
               New Observation
@@ -76,10 +77,13 @@ export function AppSidebar({ onNewEntry, totalObservations, todayObservations }:
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 border-t border-gray-100">
+      <SidebarFooter className="p-4 border-t border-gray-100 dark:border-gray-700 space-y-3">
+        <div className="px-2">
+          <ThemeToggle />
+        </div>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 rounded-md">
+            <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
               <Settings className="h-4 w-4" />
               <span>Settings</span>
             </SidebarMenuButton>
