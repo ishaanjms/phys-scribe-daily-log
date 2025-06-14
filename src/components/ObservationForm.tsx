@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { X, Save, User, Calendar, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -316,9 +317,9 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
             <div className="flex gap-3 pt-4">
               <Button
                 type="submit"
-                className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-200"
+                className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 text-white"
               >
-                <Save className="h-4 w-4 mr-2" />
+                <Save className="h-4 w-4 mr-2 text-white" />
                 Save Observation
               </Button>
               <Button
