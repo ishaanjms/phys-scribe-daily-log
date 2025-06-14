@@ -1,13 +1,11 @@
-
 import { useState, useEffect } from "react";
-import { Calendar, BookOpen, Plus, Search, FileText, Beaker } from "lucide-react";
+import { Search, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { ObservationForm } from "@/components/ObservationForm";
 import { ObservationCard } from "@/components/ObservationCard";
-import { StatsCard } from "@/components/StatsCard";
+import { AppSidebar } from "@/components/AppSidebar";
 
 export interface CustomField {
   id: string;
@@ -80,156 +78,113 @@ const Index = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg">
-                <BookOpen className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-slate-800">Eureka Notebook</h1>
-                <p className="text-sm text-slate-600">Daily Observations & Insights</p>
-              </div>
-            </div>
-            <Button
-              onClick={() => setShowForm(true)}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-200"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              New Entry
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <StatsCard
-            title="Total Observations"
-            value={observations.length}
-            icon={FileText}
-            color="blue"
-          />
-          <StatsCard
-            title="Today's Entries"
-            value={todayObservations.length}
-            icon={Calendar}
-            color="green"
-          />
-          <StatsCard
-            title="Active Research"
-            value={new Set(observations.map(obs => obs.researcher)).size}
-            icon={Beaker}
-            color="purple"
-          />
-        </div>
-
-        {/* Search and Filter */}
-        <Card className="mb-8 border-0 shadow-lg bg-white/60 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-slate-800">
-              <Search className="h-5 w-5" />
-              Search & Filter
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-white">
+        <AppSidebar 
+          onNewEntry={() => setShowForm(true)}
+          totalObservations={observations.length}
+          todayObservations={todayObservations.length}
+        />
+        
+        <SidebarInset className="flex-1">
+          <header className="flex h-16 shrink-0 items-center gap-2 border-b border-gray-200 px-6">
+            <SidebarTrigger className="-ml-1" />
+            <div className="flex items-center gap-2 flex-1">
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
-                  placeholder="Search observations, problems, solutions..."
+                  placeholder="Search observations..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="border-slate-300 focus:border-blue-500 focus:ring-blue-500"
+                  className="pl-10 border-gray-200 bg-gray-50 focus:bg-white transition-colors"
                 />
               </div>
-              <div className="sm:w-48">
-                <Input
-                  type="date"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  className="border-slate-300 focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
+              <Input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="w-40 border-gray-200"
+              />
               {(searchTerm || selectedDate) && (
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   onClick={() => {
                     setSearchTerm("");
                     setSelectedDate("");
                   }}
-                  className="border-slate-300 hover:bg-slate-50"
+                  className="text-gray-500 hover:text-gray-700"
                 >
                   Clear
                 </Button>
               )}
             </div>
-          </CardContent>
-        </Card>
+            <Button
+              onClick={() => setShowForm(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              New
+            </Button>
+          </header>
 
-        {/* Observations List */}
-        <div className="space-y-6">
-          {filteredObservations.length === 0 ? (
-            <Card className="border-0 shadow-lg bg-white/60 backdrop-blur-sm">
-              <CardContent className="text-center py-12">
-                <BookOpen className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-slate-600 mb-2">
-                  {observations.length === 0 ? "No observations yet" : "No matching observations"}
-                </h3>
-                <p className="text-slate-500 mb-6">
-                  {observations.length === 0 
-                    ? "Start documenting your research journey by adding your first observation."
-                    : "Try adjusting your search terms or date filter."
-                  }
+          <main className="flex-1 p-6">
+            <div className="max-w-4xl mx-auto">
+              <div className="mb-8">
+                <h1 className="text-2xl font-semibold text-gray-900 mb-2">Research Observations</h1>
+                <p className="text-gray-600">
+                  {filteredObservations.length} observations
+                  {searchTerm && ` matching "${searchTerm}"`}
+                  {selectedDate && ` from ${selectedDate}`}
                 </p>
-                {observations.length === 0 && (
-                  <Button
-                    onClick={() => setShowForm(true)}
-                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add First Observation
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          ) : (
-            <>
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-slate-800">
-                  Research Observations ({filteredObservations.length})
-                </h2>
-                <Badge variant="secondary" className="bg-slate-200 text-slate-700">
-                  {searchTerm && `Filtered by: "${searchTerm}"`}
-                  {selectedDate && `Date: ${selectedDate}`}
-                </Badge>
               </div>
-              
-              <div className="grid gap-6">
-                {filteredObservations.map((observation) => (
-                  <ObservationCard
-                    key={observation.id}
-                    observation={observation}
-                    onDelete={deleteObservation}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
 
-      {/* Observation Form Modal */}
-      {showForm && (
-        <ObservationForm
-          onSubmit={addObservation}
-          onClose={() => setShowForm(false)}
-        />
-      )}
-    </div>
+              {filteredObservations.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Search className="h-8 w-8 text-gray-400" />
+                  </div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    {observations.length === 0 ? "No observations yet" : "No matching observations"}
+                  </h3>
+                  <p className="text-gray-500 mb-6 max-w-sm mx-auto">
+                    {observations.length === 0 
+                      ? "Start documenting your research journey by creating your first observation."
+                      : "Try adjusting your search terms or date filter."
+                    }
+                  </p>
+                  {observations.length === 0 && (
+                    <Button
+                      onClick={() => setShowForm(true)}
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create first observation
+                    </Button>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {filteredObservations.map((observation) => (
+                    <ObservationCard
+                      key={observation.id}
+                      observation={observation}
+                      onDelete={deleteObservation}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          </main>
+        </SidebarInset>
+
+        {showForm && (
+          <ObservationForm
+            onSubmit={addObservation}
+            onClose={() => setShowForm(false)}
+          />
+        )}
+      </div>
+    </SidebarProvider>
   );
 };
 
