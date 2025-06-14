@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Search, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -36,7 +35,13 @@ const Index = () => {
   useEffect(() => {
     const savedObservations = localStorage.getItem("physics-observations");
     if (savedObservations) {
-      setObservations(JSON.parse(savedObservations));
+      const parsedObservations = JSON.parse(savedObservations);
+      // Migrate old observations that don't have a title field
+      const migratedObservations = parsedObservations.map((obs: any) => ({
+        ...obs,
+        title: obs.title || "Untitled Observation" // Add default title if missing
+      }));
+      setObservations(migratedObservations);
     }
   }, []);
 
