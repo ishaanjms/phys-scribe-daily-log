@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { X, Save, User, Calendar, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -228,9 +229,9 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
                     <SelectValue placeholder="Add field type" />
                   </SelectTrigger>
                   <SelectContent className="bg-white border border-slate-200 shadow-lg z-[60]">
-                    <SelectItem value="text" className="text-slate-900 hover:bg-slate-100 focus:bg-slate-100">Text Field</SelectItem>
-                    <SelectItem value="number" className="text-slate-900 hover:bg-slate-100 focus:bg-slate-100">Numerical Value</SelectItem>
-                    <SelectItem value="table" className="text-slate-900 hover:bg-slate-100 focus:bg-slate-100">Data Table</SelectItem>
+                    <SelectItem value="text" className="text-slate-900 hover:bg-blue-50 hover:text-blue-900 focus:bg-blue-50 focus:text-blue-900 cursor-pointer">Text Field</SelectItem>
+                    <SelectItem value="number" className="text-slate-900 hover:bg-blue-50 hover:text-blue-900 focus:bg-blue-50 focus:text-blue-900 cursor-pointer">Numerical Value</SelectItem>
+                    <SelectItem value="table" className="text-slate-900 hover:bg-blue-50 hover:text-blue-900 focus:bg-blue-50 focus:text-blue-900 cursor-pointer">Data Table</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
