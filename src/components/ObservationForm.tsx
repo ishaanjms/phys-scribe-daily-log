@@ -1,13 +1,13 @@
-
 import { useState } from "react";
-import { X, Save, User, Calendar, Hash } from "lucide-react";
+import { X, Save, User, Calendar, Hash, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import type { Observation } from "../pages/Index";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { Observation, CustomField } from "../pages/Index";
 
 interface ObservationFormProps {
   onSubmit: (observation: Omit<Observation, "id">) => void;
@@ -22,6 +22,7 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
     outcome: "",
     researcher: "",
     tags: [] as string[],
+    customFields: [] as CustomField[],
   });
   const [tagInput, setTagInput] = useState("");
 
@@ -50,6 +51,78 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
     }));
   };
 
+  const addCustomField = (type: CustomField['type']) => {
+    const newField: CustomField = {
+      id: Date.now().toString(),
+      type,
+      label: "",
+      value: type === 'table' ? [['', '']] : type === 'number' ? 0 : "",
+    };
+    setFormData(prev => ({
+      ...prev,
+      customFields: [...prev.customFields, newField]
+    }));
+  };
+
+  const updateCustomField = (id: string, updates: Partial<CustomField>) => {
+    setFormData(prev => ({
+      ...prev,
+      customFields: prev.customFields.map(field =>
+        field.id === id ? { ...field, ...updates } : field
+      )
+    }));
+  };
+
+  const removeCustomField = (id: string) => {
+    setFormData(prev => ({
+      ...prev,
+      customFields: prev.customFields.filter(field => field.id !== id)
+    }));
+  };
+
+  const updateTableCell = (fieldId: string, rowIndex: number, colIndex: number, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      customFields: prev.customFields.map(field => {
+        if (field.id === fieldId && field.type === 'table') {
+          const newTable = [...(field.value as string[][])];
+          newTable[rowIndex][colIndex] = value;
+          return { ...field, value: newTable };
+        }
+        return field;
+      })
+    }));
+  };
+
+  const addTableRow = (fieldId: string) => {
+    setFormData(prev => ({
+      ...prev,
+      customFields: prev.customFields.map(field => {
+        if (field.id === fieldId && field.type === 'table') {
+          const currentTable = field.value as string[][];
+          const colCount = currentTable[0]?.length || 2;
+          const newRow = new Array(colCount).fill('');
+          return { ...field, value: [...currentTable, newRow] };
+        }
+        return field;
+      })
+    }));
+  };
+
+  const addTableColumn = (fieldId: string) => {
+    setFormData(prev => ({
+      ...prev,
+      customFields: prev.customFields.map(field => {
+        if (field.id === fieldId && field.type === 'table') {
+          const currentTable = field.value as string[][];
+          const newTable = currentTable.map(row => [...row, '']);
+          return { ...field, value: newTable };
+        }
+        return field;
+      })
+    }));
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && e.target === document.activeElement) {
       e.preventDefault();
@@ -59,7 +132,7 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto border-0 shadow-2xl bg-white">
+      <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto border-0 shadow-2xl bg-white">
         <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
@@ -187,6 +260,115 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
                   ))}
                 </div>
               )}
+            </div>
+
+            {/* Custom Fields */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-slate-700 font-medium">Additional Data Fields</Label>
+                <Select onValueChange={(value) => addCustomField(value as CustomField['type'])}>
+                  <SelectTrigger className="w-48">
+                    <SelectValue placeholder="Add field type" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-slate-200 shadow-lg z-50">
+                    <SelectItem value="text">Text Field</SelectItem>
+                    <SelectItem value="number">Numerical Value</SelectItem>
+                    <SelectItem value="table">Data Table</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {formData.customFields.map((field) => (
+                <div key={field.id} className="border border-slate-200 rounded-lg p-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Input
+                      placeholder="Field label (e.g., Temperature, Velocity, Results)"
+                      value={field.label}
+                      onChange={(e) => updateCustomField(field.id, { label: e.target.value })}
+                      className="flex-1 border-slate-300 focus:border-blue-500 focus:ring-blue-500"
+                    />
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                      {field.type}
+                    </Badge>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeCustomField(field.id)}
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  {field.type === 'text' && (
+                    <Textarea
+                      placeholder="Enter text value..."
+                      value={field.value as string}
+                      onChange={(e) => updateCustomField(field.id, { value: e.target.value })}
+                      className="border-slate-300 focus:border-blue-500 focus:ring-blue-500"
+                    />
+                  )}
+
+                  {field.type === 'number' && (
+                    <Input
+                      type="number"
+                      step="any"
+                      placeholder="Enter numerical value..."
+                      value={field.value as number}
+                      onChange={(e) => updateCustomField(field.id, { value: parseFloat(e.target.value) || 0 })}
+                      className="border-slate-300 focus:border-blue-500 focus:ring-blue-500"
+                    />
+                  )}
+
+                  {field.type === 'table' && (
+                    <div className="space-y-2">
+                      <div className="overflow-x-auto">
+                        <table className="w-full border border-slate-200 rounded">
+                          <tbody>
+                            {(field.value as string[][]).map((row, rowIndex) => (
+                              <tr key={rowIndex}>
+                                {row.map((cell, colIndex) => (
+                                  <td key={colIndex} className="border border-slate-200 p-1">
+                                    <Input
+                                      value={cell}
+                                      onChange={(e) => updateTableCell(field.id, rowIndex, colIndex, e.target.value)}
+                                      className="border-0 focus:ring-1 focus:ring-blue-500 text-sm"
+                                      placeholder={`${rowIndex === 0 ? 'Header' : 'Data'}`}
+                                    />
+                                  </td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => addTableRow(field.id)}
+                          className="text-xs"
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Add Row
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => addTableColumn(field.id)}
+                          className="text-xs"
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Add Column
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
 
             {/* Submit Button */}

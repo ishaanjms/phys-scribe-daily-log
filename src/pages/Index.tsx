@@ -9,6 +9,13 @@ import { ObservationForm } from "@/components/ObservationForm";
 import { ObservationCard } from "@/components/ObservationCard";
 import { StatsCard } from "@/components/StatsCard";
 
+export interface CustomField {
+  id: string;
+  type: 'number' | 'table' | 'text';
+  label: string;
+  value: string | number | string[][];
+}
+
 export interface Observation {
   id: string;
   date: string;
@@ -17,6 +24,7 @@ export interface Observation {
   outcome: string;
   tags: string[];
   researcher: string;
+  customFields: CustomField[];
 }
 
 const Index = () => {
@@ -56,7 +64,11 @@ const Index = () => {
       obs.problem.toLowerCase().includes(searchTerm.toLowerCase()) ||
       obs.solution.toLowerCase().includes(searchTerm.toLowerCase()) ||
       obs.outcome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      obs.researcher.toLowerCase().includes(searchTerm.toLowerCase());
+      obs.researcher.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      obs.customFields.some(field => 
+        field.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        String(field.value).toLowerCase().includes(searchTerm.toLowerCase())
+      );
     
     const matchesDate = selectedDate ? obs.date === selectedDate : true;
     
