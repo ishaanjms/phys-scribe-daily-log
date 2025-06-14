@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Search, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,10 +28,10 @@ export interface Observation {
 const Index = () => {
   const [observations, setObservations] = useState<Observation[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [editingObservation, setEditingObservation] = useState<Observation | undefined>();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
 
-  // Load observations from localStorage on component mount
   useEffect(() => {
     const savedObservations = localStorage.getItem("physics-observations");
     if (savedObservations) {
@@ -46,7 +45,6 @@ const Index = () => {
     }
   }, []);
 
-  // Save observations to localStorage whenever observations change
   useEffect(() => {
     localStorage.setItem("physics-observations", JSON.stringify(observations));
   }, [observations]);
@@ -60,8 +58,26 @@ const Index = () => {
     setShowForm(false);
   };
 
+  const updateObservation = (updatedObservation: Observation) => {
+    setObservations(prev => 
+      prev.map(obs => obs.id === updatedObservation.id ? updatedObservation : obs)
+    );
+    setShowForm(false);
+    setEditingObservation(undefined);
+  };
+
   const deleteObservation = (id: string) => {
     setObservations(prev => prev.filter(obs => obs.id !== id));
+  };
+
+  const handleEditObservation = (observation: Observation) => {
+    setEditingObservation(observation);
+    setShowForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setEditingObservation(undefined);
   };
 
   const filteredObservations = observations.filter(obs => {
@@ -177,6 +193,7 @@ const Index = () => {
                       key={observation.id}
                       observation={observation}
                       onDelete={deleteObservation}
+                      onEdit={handleEditObservation}
                     />
                   ))}
                 </div>
@@ -188,7 +205,9 @@ const Index = () => {
         {showForm && (
           <ObservationForm
             onSubmit={addObservation}
-            onClose={() => setShowForm(false)}
+            onUpdate={updateObservation}
+            onClose={handleCloseForm}
+            editingObservation={editingObservation}
           />
         )}
       </div>

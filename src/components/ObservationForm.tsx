@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Save, User, Calendar, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,10 +11,12 @@ import type { Observation, CustomField } from "../pages/Index";
 
 interface ObservationFormProps {
   onSubmit: (observation: Omit<Observation, "id">) => void;
+  onUpdate?: (observation: Observation) => void;
   onClose: () => void;
+  editingObservation?: Observation;
 }
 
-export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => {
+export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservation }: ObservationFormProps) => {
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
     title: "",
@@ -27,12 +28,36 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
     customFields: [] as CustomField[],
   });
 
+  // Populate form data when editing
+  useEffect(() => {
+    if (editingObservation) {
+      setFormData({
+        date: editingObservation.date,
+        title: editingObservation.title,
+        problem: editingObservation.problem,
+        solution: editingObservation.solution,
+        outcome: editingObservation.outcome,
+        researcher: editingObservation.researcher,
+        tags: [],
+        customFields: editingObservation.customFields || [],
+      });
+    }
+  }, [editingObservation]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.problem.trim() || !formData.researcher.trim() || !formData.title.trim()) {
       return;
     }
-    onSubmit(formData);
+    
+    if (editingObservation && onUpdate) {
+      onUpdate({
+        ...editingObservation,
+        ...formData,
+      });
+    } else {
+      onSubmit(formData);
+    }
   };
 
   const addCustomField = (type: CustomField['type']) => {
@@ -114,7 +139,7 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
-              New Research Observation
+              {editingObservation ? "Edit Research Observation" : "New Research Observation"}
             </CardTitle>
             <Button
               variant="ghost"
@@ -336,7 +361,7 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
                 className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 text-white"
               >
                 <Save className="h-4 w-4 mr-2 text-white" />
-                Save Observation
+                {editingObservation ? "Update Observation" : "Save Observation"}
               </Button>
               <Button
                 type="button"

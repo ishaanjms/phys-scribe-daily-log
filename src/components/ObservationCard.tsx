@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Calendar, User, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import { Calendar, User, Trash2, ChevronDown, ChevronUp, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -8,9 +8,10 @@ import type { Observation } from "../pages/Index";
 interface ObservationCardProps {
   observation: Observation;
   onDelete: (id: string) => void;
+  onEdit: (observation: Observation) => void;
 }
 
-export const ObservationCard = ({ observation, onDelete }: ObservationCardProps) => {
+export const ObservationCard = ({ observation, onDelete, onEdit }: ObservationCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const formatDate = (dateString: string) => {
@@ -26,6 +27,10 @@ export const ObservationCard = ({ observation, onDelete }: ObservationCardProps)
     if (window.confirm("Are you sure you want to delete this observation?")) {
       onDelete(observation.id);
     }
+  };
+
+  const handleEdit = () => {
+    onEdit(observation);
   };
 
   const renderCustomField = (field: any) => {
@@ -100,6 +105,14 @@ export const ObservationCard = ({ observation, onDelete }: ObservationCardProps)
               className="h-7 w-7 p-0 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
             >
               {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleEdit}
+              className="h-7 w-7 p-0 text-gray-400 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
+            >
+              <Edit className="h-4 w-4" />
             </Button>
             <Button
               variant="ghost"
