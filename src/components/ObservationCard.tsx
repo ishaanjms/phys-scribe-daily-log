@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Calendar, User, Trash2, ChevronDown, ChevronUp, Hash, MoreHorizontal } from "lucide-react";
+import { Calendar, User, Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -112,20 +111,6 @@ export const ObservationCard = ({ observation, onDelete }: ObservationCardProps)
             </Button>
           </div>
         </div>
-
-        {observation.tags.length > 0 && (
-          <div className="flex items-center gap-2 flex-wrap mb-4">
-            {observation.tags.map((tag) => (
-              <Badge
-                key={tag}
-                variant="secondary"
-                className="text-xs bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100"
-              >
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        )}
 
         <div className="space-y-4">
           <div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Save, User, Calendar, Hash, Plus, Trash2 } from "lucide-react";
+import { X, Save, User, Calendar, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -24,7 +24,6 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
     tags: [] as string[],
     customFields: [] as CustomField[],
   });
-  const [tagInput, setTagInput] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,23 +31,6 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
       return;
     }
     onSubmit(formData);
-  };
-
-  const addTag = () => {
-    if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
-      setFormData(prev => ({
-        ...prev,
-        tags: [...prev.tags, tagInput.trim()]
-      }));
-      setTagInput("");
-    }
-  };
-
-  const removeTag = (tagToRemove: string) => {
-    setFormData(prev => ({
-      ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove)
-    }));
   };
 
   const addCustomField = (type: CustomField['type']) => {
@@ -121,13 +103,6 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
         return field;
       })
     }));
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && e.target === document.activeElement) {
-      e.preventDefault();
-      addTag();
-    }
   };
 
   return (
@@ -226,40 +201,6 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
                 onChange={(e) => setFormData(prev => ({ ...prev, outcome: e.target.value }))}
                 className="min-h-[100px] border-slate-300 focus:border-blue-500 focus:ring-blue-500 resize-none"
               />
-            </div>
-
-            {/* Tags */}
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2 text-slate-700 font-medium">
-                <Hash className="h-4 w-4" />
-                Tags
-              </Label>
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Add tags (e.g., quantum, experiment, theory)"
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  className="border-slate-300 focus:border-blue-500 focus:ring-blue-500"
-                />
-                <Button type="button" onClick={addTag} variant="outline" className="px-3">
-                  Add
-                </Button>
-              </div>
-              {formData.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {formData.tags.map((tag) => (
-                    <Badge
-                      key={tag}
-                      variant="secondary"
-                      className="bg-blue-100 text-blue-800 hover:bg-blue-200 cursor-pointer"
-                      onClick={() => removeTag(tag)}
-                    >
-                      {tag} <X className="h-3 w-3 ml-1" />
-                    </Badge>
-                  ))}
-                </div>
-              )}
             </div>
 
             {/* Custom Fields */}
