@@ -6,6 +6,9 @@ import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/s
 import { ObservationForm } from "@/components/ObservationForm";
 import { ObservationCard } from "@/components/ObservationCard";
 import { AppSidebar } from "@/components/AppSidebar";
+import { ObservationHeader } from "@/components/ObservationHeader";
+import { EmptyState } from "@/components/EmptyState";
+import { ObservationsList } from "@/components/ObservationsList";
 
 export interface CustomField {
   id: string;
@@ -112,45 +115,17 @@ const Index = () => {
         />
         
         <SidebarInset className="flex-1">
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b border-gray-200 dark:border-gray-700 px-6">
-            <SidebarTrigger className="-ml-1" />
-            <div className="flex items-center gap-2 flex-1">
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
-                <Input
-                  placeholder="Search observations..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-700 transition-colors text-gray-900 dark:text-gray-100"
-                />
-              </div>
-              <Input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                className="w-40 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-              />
-              {(searchTerm || selectedDate) && (
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    setSearchTerm("");
-                    setSelectedDate("");
-                  }}
-                  className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-                >
-                  Clear
-                </Button>
-              )}
-            </div>
-            <Button
-              onClick={() => setShowForm(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              New
-            </Button>
-          </header>
+          <ObservationHeader
+            searchTerm={searchTerm}
+            selectedDate={selectedDate}
+            onSearchTerm={setSearchTerm}
+            onDate={setSelectedDate}
+            onClear={() => {
+              setSearchTerm("");
+              setSelectedDate("");
+            }}
+            onNew={() => setShowForm(true)}
+          />
 
           <main className="flex-1 p-6">
             <div className="max-w-4xl mx-auto">
@@ -164,69 +139,21 @@ const Index = () => {
               </div>
 
               {filteredObservations.length === 0 ? (
-                <div className="text-center py-12 flex flex-col items-center justify-center">
-                  {observations.length === 0 ? (
-                    // No observations in total: show rocket (existing logic)
-                    <>
-                      <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 animate-fade-in">
-                        <Rocket className="h-8 w-8 text-gray-400 dark:text-gray-500" />
-                      </div>
-                      <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-                        No observations yet
-                      </h3>
-                      <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm mx-auto">
-                        Begin Your Research Journey
-                      </p>
-                      <Button
-                        onClick={() => setShowForm(true)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white"
-                      >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Create first observation
-                      </Button>
-                    </>
-                  ) : (
-                    // No matching search: show puppy with fun message
-                    <>
-                      <div className="w-20 h-20 bg-yellow-50 dark:bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 animate-fade-in hover:scale-105 transition-transform shadow">
-                        <Dog className="h-12 w-12 text-yellow-400 dark:text-yellow-300" />
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
-                        No results found!
-                      </h3>
-                      <p className="text-gray-500 dark:text-gray-400 mb-4 max-w-xs mx-auto">
-                        {`We couldn't find any observations matching your search.`}
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                        <span className="inline-block">
-                          <span role="img" aria-label="Puppy">🐶</span>
-                          &nbsp;This puppy couldn't sniff out any results!
-                        </span>
-                      </p>
-                      <Button
-                        variant="ghost"
-                        onClick={() => {
-                          setSearchTerm("");
-                          setSelectedDate("");
-                        }}
-                        className="text-blue-600 dark:text-blue-400 hover:text-blue-800"
-                      >
-                        Clear search & try again
-                      </Button>
-                    </>
-                  )}
-                </div>
+                <EmptyState
+                  observationsCount={observations.length}
+                  onCreate={() => setShowForm(true)}
+                  onClear={() => {
+                    setSearchTerm("");
+                    setSelectedDate("");
+                  }}
+                  searchActive={Boolean(searchTerm || selectedDate)}
+                />
               ) : (
-                <div className="space-y-4">
-                  {filteredObservations.map((observation) => (
-                    <ObservationCard
-                      key={observation.id}
-                      observation={observation}
-                      onDelete={deleteObservation}
-                      onEdit={handleEditObservation}
-                    />
-                  ))}
-                </div>
+                <ObservationsList
+                  observations={filteredObservations}
+                  onEdit={handleEditObservation}
+                  onDelete={deleteObservation}
+                />
               )}
             </div>
           </main>
