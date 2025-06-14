@@ -78,7 +78,7 @@ const Index = () => {
                 <BookOpen className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-800">Physics Research Notebook</h1>
+                <h1 className="text-xl font-bold text-slate-800">Eureka Notebook</h1>
                 <p className="text-sm text-slate-600">Daily Observations & Insights</p>
               </div>
             </div>
