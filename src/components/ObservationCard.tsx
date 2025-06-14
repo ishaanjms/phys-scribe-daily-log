@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Calendar, User, Trash2, ChevronDown, ChevronUp, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -130,14 +131,17 @@ export const ObservationCard = ({ observation, onDelete, onEdit }: ObservationCa
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
               {observation.title}
             </h2>
-            <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Problem</h3>
-            <div className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">
-              {observation.problem}
-            </div>
           </div>
 
           {isExpanded && (
             <div className="space-y-4 pt-2 border-t border-gray-100 dark:border-gray-700">
+              <div>
+                <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Problem</h3>
+                <div className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">
+                  {observation.problem}
+                </div>
+              </div>
+
               {observation.solution && (
                 <div>
                   <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Solution</h3>
@@ -174,7 +178,7 @@ export const ObservationCard = ({ observation, onDelete, onEdit }: ObservationCa
             </div>
           )}
 
-          {!isExpanded && (observation.solution || observation.outcome) && (
+          {!isExpanded && (
             <Button
               variant="ghost"
               size="sm"
