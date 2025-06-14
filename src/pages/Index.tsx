@@ -17,6 +17,7 @@ export interface CustomField {
 export interface Observation {
   id: string;
   date: string;
+  time: string; // <--- Added this line
   title: string;
   problem: string;
   solution: string;

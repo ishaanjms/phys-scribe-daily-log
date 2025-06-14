@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from "react";
-import { X, Save, User, Calendar, Plus, Trash2 } from "lucide-react";
+import { X, Save, User, Calendar, Plus, Trash2, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -19,6 +20,7 @@ interface ObservationFormProps {
 export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservation }: ObservationFormProps) => {
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
+    time: new Date().toISOString().slice(11, 16), // default current time
     title: "",
     problem: "",
     solution: "",
@@ -39,6 +41,7 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
     if (editingObservation) {
       setFormData({
         date: editingObservation.date,
+        time: editingObservation.time || "",
         title: editingObservation.title,
         problem: editingObservation.problem,
         solution: editingObservation.solution,
@@ -60,7 +63,7 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
     if (!formData.researcher.trim() || !formData.title.trim()) {
       return;
     }
-    
+
     if (editingObservation && onUpdate) {
       onUpdate({
         ...editingObservation,
@@ -180,11 +183,11 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
             </Button>
           </div>
         </CardHeader>
-        
+
         <CardContent className="p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Date and Researcher */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Date and Time and Researcher */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="date" className="flex items-center gap-2 text-slate-700">
                   <Calendar className="h-4 w-4" />
@@ -199,7 +202,20 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
                   required
                 />
               </div>
-              
+              <div className="space-y-2">
+                <Label htmlFor="time" className="flex items-center gap-2 text-slate-700">
+                  <Clock className="h-4 w-4" />
+                  Time
+                </Label>
+                <Input
+                  id="time"
+                  type="time"
+                  value={formData.time}
+                  onChange={(e) => setFormData(prev => ({ ...prev, time: e.target.value }))}
+                  className="border-slate-300 focus:border-blue-500 focus:ring-blue-500"
+                  required
+                />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="researcher" className="flex items-center gap-2 text-slate-700">
                   <User className="h-4 w-4" />
