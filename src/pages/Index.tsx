@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Search, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -154,7 +155,7 @@ const Index = () => {
           <main className="flex-1 p-6">
             <div className="max-w-4xl mx-auto">
               <div className="mb-8">
-                <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Research Observations</h1>
+                <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Welcome Back :)</h1>
                 <p className="text-gray-600 dark:text-gray-400">
                   {filteredObservations.length} observations
                   {searchTerm && ` matching "${searchTerm}"`}
