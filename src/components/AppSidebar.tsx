@@ -1,5 +1,5 @@
 
-import { Calendar, BookOpen, Search, Plus, FileText, Settings, Home } from "lucide-react";
+import { Calendar, BookOpen, Plus, FileText, Settings, Home } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -49,12 +49,6 @@ export function AppSidebar({ onNewEntry, totalObservations, todayObservations }:
                   <Calendar className="h-4 w-4" />
                   <span>Today</span>
                   <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">{todayObservations}</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
-                  <Search className="h-4 w-4" />
-                  <span>Search</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
