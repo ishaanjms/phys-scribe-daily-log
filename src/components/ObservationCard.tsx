@@ -114,6 +114,9 @@ export const ObservationCard = ({ observation, onDelete }: ObservationCardProps)
 
         <div className="space-y-4">
           <div>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+              {observation.title}
+            </h2>
             <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Problem</h3>
             <div className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">
               {observation.problem}

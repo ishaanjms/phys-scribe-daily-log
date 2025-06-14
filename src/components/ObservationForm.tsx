@@ -17,6 +17,7 @@ interface ObservationFormProps {
 export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => {
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
+    title: "",
     problem: "",
     solution: "",
     outcome: "",
@@ -27,7 +28,7 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.problem.trim() || !formData.researcher.trim()) {
+    if (!formData.problem.trim() || !formData.researcher.trim() || !formData.title.trim()) {
       return;
     }
     onSubmit(formData);
@@ -158,6 +159,21 @@ export const ObservationForm = ({ onSubmit, onClose }: ObservationFormProps) => 
                   required
                 />
               </div>
+            </div>
+
+            {/* Title */}
+            <div className="space-y-2">
+              <Label htmlFor="title" className="text-slate-700 font-medium">
+                Title *
+              </Label>
+              <Input
+                id="title"
+                placeholder="Brief title for your observation..."
+                value={formData.title}
+                onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                className="border-slate-300 focus:border-blue-500 focus:ring-blue-500"
+                required
+              />
             </div>
 
             {/* Problem */}

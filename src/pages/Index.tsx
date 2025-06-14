@@ -18,6 +18,7 @@ export interface CustomField {
 export interface Observation {
   id: string;
   date: string;
+  title: string;
   problem: string;
   solution: string;
   outcome: string;
@@ -59,6 +60,7 @@ const Index = () => {
 
   const filteredObservations = observations.filter(obs => {
     const matchesSearch = 
+      obs.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       obs.problem.toLowerCase().includes(searchTerm.toLowerCase()) ||
       obs.solution.toLowerCase().includes(searchTerm.toLowerCase()) ||
       obs.outcome.toLowerCase().includes(searchTerm.toLowerCase()) ||
