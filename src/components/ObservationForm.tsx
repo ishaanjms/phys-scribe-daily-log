@@ -46,7 +46,7 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.problem.trim() || !formData.researcher.trim() || !formData.title.trim()) {
+    if (!formData.researcher.trim() || !formData.title.trim()) {
       return;
     }
     
@@ -89,7 +89,7 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
     }));
   };
 
-  const clearOptionalField = (fieldName: 'solution' | 'outcome') => {
+  const clearOptionalField = (fieldName: 'problem' | 'solution' | 'outcome') => {
     setFormData(prev => ({
       ...prev,
       [fieldName]: ""
@@ -209,18 +209,31 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
               />
             </div>
 
-            {/* Problem */}
+            {/* Problem - Now Optional */}
             <div className="space-y-2">
-              <Label htmlFor="problem" className="text-slate-700 font-medium">
-                Problem Encountered *
-              </Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="problem" className="text-slate-700 font-medium">
+                  Problem Encountered
+                </Label>
+                {formData.problem && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => clearOptionalField('problem')}
+                    className="text-red-500 hover:text-red-700 hover:bg-red-50 h-7 px-2"
+                  >
+                    <Trash2 className="h-3 w-3 mr-1" />
+                    Clear
+                  </Button>
+                )}
+              </div>
               <Textarea
                 id="problem"
                 placeholder="Describe the problem or challenge you faced today..."
                 value={formData.problem}
                 onChange={(e) => setFormData(prev => ({ ...prev, problem: e.target.value }))}
                 className="min-h-[100px] border-slate-300 focus:border-blue-500 focus:ring-blue-500 resize-none"
-                required
               />
             </div>
 
