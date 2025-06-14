@@ -1,4 +1,5 @@
 
+
 import { useState } from "react";
 import { Calendar, User, Trash2, ChevronDown, ChevronUp, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -175,6 +176,15 @@ export const ObservationCard = ({ observation, onDelete, onEdit }: ObservationCa
                   ))}
                 </div>
               )}
+
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsExpanded(false)}
+                className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-xs h-7 px-2"
+              >
+                Show less
+              </Button>
             </div>
           )}
 
@@ -193,3 +203,4 @@ export const ObservationCard = ({ observation, onDelete, onEdit }: ObservationCa
     </div>
   );
 };
+
