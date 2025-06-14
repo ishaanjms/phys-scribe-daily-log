@@ -1,11 +1,12 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User } from 'lucide-react';
+import { User, ArrowLeft } from 'lucide-react';
 
 const Profile = () => {
   const [formData, setFormData] = React.useState({
@@ -30,8 +31,17 @@ const Profile = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
       <div className="max-w-2xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Profile</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">Manage your personal information</p>
+          <div className="flex items-center gap-4 mb-4">
+            <Button asChild variant="ghost" size="sm" className="p-2">
+              <Link to="/">
+                <ArrowLeft className="h-4 w-4" />
+              </Link>
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Profile</h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">Manage your personal information</p>
+            </div>
+          </div>
         </div>
 
         <Card>
