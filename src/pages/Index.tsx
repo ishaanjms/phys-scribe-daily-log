@@ -9,6 +9,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { ObservationHeader } from "@/components/ObservationHeader";
 import { EmptyState } from "@/components/EmptyState";
 import { ObservationsList } from "@/components/ObservationsList";
+import { format } from "date-fns"; // import date-fns format
 
 export interface CustomField {
   id: string;
@@ -105,6 +106,9 @@ const Index = () => {
     obs.date === new Date().toISOString().split('T')[0]
   );
 
+  // Format today's date as "14 June, 2025"
+  const todayDisplay = format(new Date(), "d MMMM, yyyy");
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-white dark:bg-gray-900">
@@ -134,9 +138,7 @@ const Index = () => {
                   Welcome Back :)
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400">
-                  {filteredObservations.length} observations
-                  {searchTerm && ` matching "${searchTerm}"`}
-                  {selectedDate && ` from ${selectedDate}`}
+                  {todayDisplay}
                 </p>
               </div>
 
