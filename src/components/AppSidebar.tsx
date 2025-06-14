@@ -1,5 +1,5 @@
 
-import { Calendar, BookOpen, Plus, FileText, Settings, Home } from "lucide-react";
+import { Calendar, BookOpen, Plus, FileText, Settings, Home, User } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -76,6 +76,12 @@ export function AppSidebar({ onNewEntry, totalObservations, todayObservations }:
           <ThemeToggle />
         </div>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
+              <User className="h-4 w-4" />
+              <span>Profile</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
               <Settings className="h-4 w-4" />
