@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, Plus } from "lucide-react";
+import { Search, Plus, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
@@ -165,7 +165,11 @@ const Index = () => {
               {filteredObservations.length === 0 ? (
                 <div className="text-center py-12">
                   <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Search className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+                    {observations.length === 0 ? (
+                      <Rocket className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+                    ) : (
+                      <Search className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+                    )}
                   </div>
                   <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
                     {observations.length === 0 ? "No observations yet" : "No matching observations"}
