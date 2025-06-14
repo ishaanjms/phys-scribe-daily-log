@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Calendar, User, Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -84,11 +83,11 @@ export const ObservationCard = ({ observation, onDelete }: ObservationCardProps)
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
             <div className="flex items-center gap-1">
-              <Calendar className="h-3 w-3" />
+              <Calendar className="h-3 w-3 text-gray-500 dark:text-gray-400" />
               <span>{formatDate(observation.date)}</span>
             </div>
             <div className="flex items-center gap-1">
-              <User className="h-3 w-3" />
+              <User className="h-3 w-3 text-gray-500 dark:text-gray-400" />
               <span>{observation.researcher}</span>
             </div>
           </div>
