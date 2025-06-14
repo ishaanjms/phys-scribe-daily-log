@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Search, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -65,7 +66,7 @@ const Index = () => {
 
   const filteredObservations = observations.filter(obs => {
     const matchesSearch = 
-      obs.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (obs.title && obs.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
       obs.problem.toLowerCase().includes(searchTerm.toLowerCase()) ||
       obs.solution.toLowerCase().includes(searchTerm.toLowerCase()) ||
       obs.outcome.toLowerCase().includes(searchTerm.toLowerCase()) ||
