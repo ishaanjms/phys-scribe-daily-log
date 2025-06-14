@@ -89,6 +89,13 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
     }));
   };
 
+  const clearOptionalField = (fieldName: 'solution' | 'outcome') => {
+    setFormData(prev => ({
+      ...prev,
+      [fieldName]: ""
+    }));
+  };
+
   const updateTableCell = (fieldId: string, rowIndex: number, colIndex: number, value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -217,11 +224,25 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
               />
             </div>
 
-            {/* Solution */}
+            {/* Solution - Now Optional */}
             <div className="space-y-2">
-              <Label htmlFor="solution" className="text-slate-700 font-medium">
-                Solution Applied
-              </Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="solution" className="text-slate-700 font-medium">
+                  Solution Applied
+                </Label>
+                {formData.solution && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => clearOptionalField('solution')}
+                    className="text-red-500 hover:text-red-700 hover:bg-red-50 h-7 px-2"
+                  >
+                    <Trash2 className="h-3 w-3 mr-1" />
+                    Clear
+                  </Button>
+                )}
+              </div>
               <Textarea
                 id="solution"
                 placeholder="Describe the approach or solution you tried..."
@@ -231,11 +252,25 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
               />
             </div>
 
-            {/* Outcome */}
+            {/* Outcome - Now Optional */}
             <div className="space-y-2">
-              <Label htmlFor="outcome" className="text-slate-700 font-medium">
-                Outcome & Results
-              </Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="outcome" className="text-slate-700 font-medium">
+                  Outcome & Results
+                </Label>
+                {formData.outcome && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => clearOptionalField('outcome')}
+                    className="text-red-500 hover:text-red-700 hover:bg-red-50 h-7 px-2"
+                  >
+                    <Trash2 className="h-3 w-3 mr-1" />
+                    Clear
+                  </Button>
+                )}
+              </div>
               <Textarea
                 id="outcome"
                 placeholder="What happened? What were the results or next steps?"
