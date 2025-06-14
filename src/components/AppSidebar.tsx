@@ -39,14 +39,14 @@ export function AppSidebar({ onNewEntry, totalObservations, todayObservations }:
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
-                  <Home className="h-4 w-4" />
+                  <Home className="h-4 w-4 text-gray-600 dark:text-gray-300" />
                   <span>All Observations</span>
                   <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">{totalObservations}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
-                  <Calendar className="h-4 w-4" />
+                  <Calendar className="h-4 w-4 text-gray-600 dark:text-gray-300" />
                   <span>Today</span>
                   <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">{todayObservations}</span>
                 </SidebarMenuButton>
