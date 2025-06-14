@@ -115,21 +115,20 @@ const Index = () => {
         />
         
         <SidebarInset className="flex-1">
-          {/* Wrap header and main in the same container for perfect alignment */}
-          <div className="max-w-4xl mx-auto w-full px-6">
-            <ObservationHeader
-              searchTerm={searchTerm}
-              selectedDate={selectedDate}
-              onSearchTerm={setSearchTerm}
-              onDate={setSelectedDate}
-              onClear={() => {
-                setSearchTerm("");
-                setSelectedDate("");
-              }}
-              onNew={() => setShowForm(true)}
-            />
+          <ObservationHeader
+            searchTerm={searchTerm}
+            selectedDate={selectedDate}
+            onSearchTerm={setSearchTerm}
+            onDate={setSelectedDate}
+            onClear={() => {
+              setSearchTerm("");
+              setSelectedDate("");
+            }}
+            onNew={() => setShowForm(true)}
+          />
 
-            <main className="flex-1 mt-8">
+          <main className="flex-1 p-6">
+            <div className="max-w-4xl mx-auto w-full">
               <div className="mb-8 w-full text-left">
                 <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
                   Welcome Back :)
@@ -158,8 +157,8 @@ const Index = () => {
                   onDelete={deleteObservation}
                 />
               )}
-            </main>
-          </div>
+            </div>
+          </main>
         </SidebarInset>
 
         {showForm && (
