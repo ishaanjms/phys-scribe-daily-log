@@ -77,9 +77,11 @@ export function AppSidebar({ onNewEntry, totalObservations, todayObservations }:
         </div>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
-              <User className="h-4 w-4" />
-              <span>Profile</span>
+            <SidebarMenuButton asChild className="w-full justify-start hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
+              <a href="/profile">
+                <User className="h-4 w-4" />
+                <span>Profile</span>
+              </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
