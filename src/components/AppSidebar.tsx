@@ -1,3 +1,4 @@
+
 import { Calendar, BookOpen, Plus, FileText, Settings, Home, User } from "lucide-react";
 import {
   Sidebar,
@@ -19,8 +20,8 @@ interface AppSidebarProps {
   onNewEntry: () => void;
   totalObservations: number;
   todayObservations: number;
-  sortKey?: "date" | "researcher" | "id";
-  setSortKey?: (v: "date" | "researcher" | "id") => void;
+  sortKey?: "date" | "researcher";
+  setSortKey?: (v: "date" | "researcher") => void;
 }
 
 export function AppSidebar({ onNewEntry, totalObservations, todayObservations, sortKey, setSortKey }: AppSidebarProps) {

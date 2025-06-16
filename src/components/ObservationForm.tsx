@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { X, Save, User, Calendar, Plus, Trash2, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -158,6 +157,38 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
           const currentTable = field.value as string[][];
           const newTable = currentTable.map(row => [...row, '']);
           return { ...field, value: newTable };
+        }
+        return field;
+      })
+    }));
+  };
+
+  const removeTableRow = (fieldId: string, rowIndex: number) => {
+    setFormData(prev => ({
+      ...prev,
+      customFields: prev.customFields.map(field => {
+        if (field.id === fieldId && field.type === 'table') {
+          const currentTable = field.value as string[][];
+          if (currentTable.length > 1) {
+            const newTable = currentTable.filter((_, index) => index !== rowIndex);
+            return { ...field, value: newTable };
+          }
+        }
+        return field;
+      })
+    }));
+  };
+
+  const removeTableColumn = (fieldId: string, colIndex: number) => {
+    setFormData(prev => ({
+      ...prev,
+      customFields: prev.customFields.map(field => {
+        if (field.id === fieldId && field.type === 'table') {
+          const currentTable = field.value as string[][];
+          if (currentTable[0]?.length > 1) {
+            const newTable = currentTable.map(row => row.filter((_, index) => index !== colIndex));
+            return { ...field, value: newTable };
+          }
         }
         return field;
       })
@@ -443,15 +474,41 @@ export const ObservationForm = ({ onSubmit, onUpdate, onClose, editingObservatio
                             {(field.value as string[][]).map((row, rowIndex) => (
                               <tr key={rowIndex}>
                                 {row.map((cell, colIndex) => (
-                                  <td key={colIndex} className="border border-slate-200 p-1">
+                                  <td key={colIndex} className="border border-slate-200 p-1 relative group">
                                     <Input
                                       value={cell}
                                       onChange={(e) => updateTableCell(field.id, rowIndex, colIndex, e.target.value)}
                                       className="border-0 focus:ring-1 focus:ring-blue-500 text-sm"
                                       placeholder={`${rowIndex === 0 ? 'Header' : 'Data'}`}
                                     />
+                                    {/* Delete column button */}
+                                    {rowIndex === 0 && (field.value as string[][])[0]?.length > 1 && (
+                                      <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => removeTableColumn(field.id, colIndex)}
+                                        className="absolute -top-2 -right-1 h-5 w-5 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                                      >
+                                        <X className="h-3 w-3" />
+                                      </Button>
+                                    )}
                                   </td>
                                 ))}
+                                {/* Delete row button */}
+                                {(field.value as string[][]).length > 1 && (
+                                  <td className="border-0 p-1">
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => removeTableRow(field.id, rowIndex)}
+                                      className="h-6 w-6 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                    >
+                                      <Trash2 className="h-3 w-3" />
+                                    </Button>
+                                  </td>
+                                )}
                               </tr>
                             ))}
                           </tbody>
